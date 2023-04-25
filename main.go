@@ -13,14 +13,19 @@ func main() {
 	urls := flag.Args()
 	// fmt.Println("args", parallel, urls)
 
+	DoConcurrently(*parallel, urls)
+
+}
+
+func DoConcurrently(parallel int, urls []string) {
 	taskChannel := make(chan string)
 	var wg sync.WaitGroup
-	for i := 0; i < *parallel; i++ {
+	for i := 0; i < parallel; i++ {
 		wg.Add(1)
 		go func(tasks chan string) {
-			//fmt.Println("--------a goroutine start")
+			// fmt.Println("--------a goroutine start", runtime.NumGoroutine())
 			defer func() {
-				//	fmt.Println("--------a goroutine end")
+				//	fmt.Println("--------a goroutine end", runtime.NumGoroutine())
 				wg.Done()
 			}()
 			for task := range tasks {
@@ -42,5 +47,4 @@ func main() {
 	}
 	close(taskChannel)
 	wg.Wait()
-
 }
