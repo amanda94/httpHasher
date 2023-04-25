@@ -1,23 +1,24 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
 func TestHash(t *testing.T) {
-	r, e := Hash("https://www.google.com")
+	u := "https://www.google.com"
+	_, e := Hash(u)
 	if e != nil {
-		t.Errorf("%v", e)
-	}
-	fmt.Println(r, e)
-
-	r, e = Hash("http://reddit.com/r/notfunny")
-	if e != nil {
-		t.Errorf("%v", e)
+		t.Errorf("%s shouldn't fail, error: %v", u, e)
 	}
 
-	r, e = Hash("https://notavalidwebsite.no")
-	fmt.Println(r, e)
-
+	u = "http://reddit.com/r/notfunny"
+	_, e = Hash(u)
+	if e != nil {
+		t.Errorf("%s shouldn't fail, error: %v", u, e)
+	}
+	u = "https://notavalidwebsite.no"
+	_, e = Hash(u)
+	if e == nil {
+		t.Errorf("this path should fail: %s", u)
+	}
 }
